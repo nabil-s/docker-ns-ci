@@ -9,6 +9,8 @@ services:
     - 8080:8080
     - 50000:50000
     container_name: jenkins-blueocean
+    networks:
+      - devnetwork
     volumes:
     - jenkins_home:/var/jenkins_home
     #- /tmp/jenkins:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
@@ -24,6 +26,8 @@ services:
       - SONARQUBE_JDBC_USERNAME=sonar
       - SONARQUBE_JDBC_PASSWORD=sonar
       - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+    networks:
+      - devnetwork
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
       - sonarqube_data:/opt/sonarqube/data
@@ -38,6 +42,8 @@ services:
     - POSTGRES_USER=sonar
     - POSTGRES_PASSWORD=sonar
     - POSTGRES_DB=sonarqube
+    networks:
+      - devnetwork
     volumes:
       - sonarqube_db:/var/lib/postgresql
 # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
@@ -51,3 +57,7 @@ volumes:
   sonarqube_data:
   sonarqube_db:
   sonarqube_extensions:
+
+networks:
+  devnetwork:
+    driver: bridge
